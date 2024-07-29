@@ -30,6 +30,11 @@ export class AuthController {
     return this.authService.login(loginDTO);
   }
 
+  //getId
+  @Post('get-info')
+  getId(@Headers('Authorization') token: string) {
+    return this.authService.getInfo(token);
+  }
   //forgot-password
   @Post('forgot-password')
   forgot(@Body() body: { email: string }) {

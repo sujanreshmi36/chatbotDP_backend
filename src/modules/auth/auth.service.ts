@@ -17,6 +17,7 @@ export class AuthService {
     private readonly mailerService: MailerService,
     private config: ConfigService
   ) { }
+  //register
   async create(signupDTO: CreateUserDto, token: string, role: string) {
     try {
       token = token.split(' ')[1];
@@ -28,12 +29,12 @@ export class AuthService {
       }
       const { email } = decodedToken;
       const existingUser = await this.userRepo.findOne({ where: { email } });
-      
+
       if (existingUser) {
         throw new ConflictException('Email address is already in use');
       }
       const salt = 10;
-      const hashedPassword = await bcrypt.hash(signupDTO.password, salt);      
+      const hashedPassword = await bcrypt.hash(signupDTO.password, salt);
       const user = new User();
       user.email = email;
       user.password = hashedPassword;
@@ -41,8 +42,8 @@ export class AuthService {
       user.role = role;
       const savedUser = await this.userRepo.save(user);
       return {
-        message:"Registered Successfully.",
-        data:savedUser
+        message: "Registered Successfully.",
+        data: savedUser
       }
 
     } catch (e) {
@@ -51,6 +52,31 @@ export class AuthService {
     }
   }
 
+  //get-info
+  async getInfo(token: string) {
+    try {
+      if (!token) {
+        throw new NotFoundException("token not found");
+      }
+      token = token.split(' ')[1];
+      let decodedToken
+      decodedToken = await jwt.verify(token, authConstants.secret);
+      if (!decodedToken) {
+        throw new ForbiddenException("Token malformed")
+      }
+      const { id } = decodedToken;
+      const user = await this.userRepo.findOne({ where: { id: id } });
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  //verify email
   async getVerify(email: string) {
     try {
       const existingUser = await this.userRepo.findOne(
