@@ -9,6 +9,7 @@ import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { User } from 'src/entitites/user.entity';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -55,6 +56,7 @@ export class AuthService {
   //get-info
   async getInfo(token: string) {
     try {
+  
       if (!token) {
         throw new NotFoundException("token not found");
       }
@@ -64,13 +66,17 @@ export class AuthService {
       if (!decodedToken) {
         throw new ForbiddenException("Token malformed")
       }
-      const { id } = decodedToken;
+      
+      const { payload } = decodedToken;
+      const { id } = payload;
       const user = await this.userRepo.findOne({ where: { id: id } });
       return {
         id: user.id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        avatar: user.avatar
       };
+
     } catch (e) {
       throw new BadRequestException(e.message);
     }

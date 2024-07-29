@@ -32,7 +32,7 @@ export class AuthController {
 
   //getId
   @Post('get-info')
-  getId(@Headers('Authorization') token: string) {
+  getInfo(@Headers('Authorization') token: string) {
     return this.authService.getInfo(token);
   }
   //forgot-password
@@ -47,24 +47,13 @@ export class AuthController {
     return this.authService.reset(body.password, token);
   }
 
-
-  // @Get(':token')
-  // verify(@Request()
-  // token: string) {
-  //   return this.authService.verifyToken(token);
+  // @Get('profile')
+  // @UseGuards(JwtAuthGuard)
+  // getProfile(
+  //   @Request()
+  //   req,
+  // ) {
+  //   return req.user;
   // }
-
-  // @Get()
-  // findAll() {
-  //   return this.authService.findAll();
-  // }
-  @Get('profile')
-  @UseGuards(JwtAuthGuard)
-  getProfile(
-    @Request()
-    req,
-  ) {
-    return req.user;
-  }
 
 }
