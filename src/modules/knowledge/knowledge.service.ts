@@ -8,7 +8,6 @@ import { User } from 'src/entitites/user.entity';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ConfigService } from '@nestjs/config';
 import { askQuesDTO } from './dto/askQuestion.dto';
-import{fetch} from "node-fetch";
 
 @Injectable()
 export class KnowledgeService {
@@ -22,7 +21,7 @@ export class KnowledgeService {
     private config: ConfigService
 
   ) { }
-  
+
   async create(createKnowledgeDto: CreateKnowledgeDto) {
     try {
       const isUser = await this.userRepo.findOne({ where: { id: createKnowledgeDto.userId } })
@@ -93,30 +92,43 @@ export class KnowledgeService {
 
   }
 
+//get paragraph
+  async findOne(uid: string) {
+    try {
+      const user = await this.userRepo.findOne({
+        where: {
+          id: uid
+        }
+      })
+      const knowledge = await this.knowledgeRepo.findOne({ where: { user } }); 
+      const { paragraph } = knowledge;
+      if (!paragraph) {
+        throw new ForbiddenException("knowledge not found")
+      }
+      return paragraph;
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
 
-//   async findOne(id:number) {
+  }
 
-//     const Knowledge= await this.knowledgeRepo.findOne({where:{id:id}});
-//     if (!Knowledge) {
-//       throw new ForbiddenException("Invalid knowledge")
-//     }
-//     return Knowledge;
-//   }
-
-//  async update(updateKnowledgeDto: UpdateKnowledgeDto) {
-//     return await this.knowledgeRepo.update(updateKnowledgeDto);
-//   }
+  //  async update(updateKnowledgeDto: UpdateKnowledgeDto) {
+  //     return await this.knowledgeRepo.update(updateKnowledgeDto);
+  //   }
 
   async remove(userId: string) {
-    const isuser= await this.userRepo.findOne({where:{id:userId}});
+    const isuser = await this.userRepo.findOne({ where: { id: userId } });
     if (!isuser) {
       throw new ForbiddenException("Invalid user")
     }
-    const knowledge=await this.knowledgeRepo.findOne({where:{user:isuser
-    }})
-     await this.knowledgeRepo.remove(knowledge);
-     return{
-      message:"Knowledge deleted"
-     }
+    const knowledge = await this.knowledgeRepo.findOne({
+      where: {
+        user: isuser
+      }
+    })
+    await this.knowledgeRepo.remove(knowledge);
+    return {
+      message: "Knowledge deleted"
+    }
   }
 }

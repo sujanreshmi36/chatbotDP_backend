@@ -27,15 +27,17 @@ export class KnowledgeController {
   remove(@Param('userId') userId: string) {
     return this.knowledgeService.remove(userId);
   }
-}
-
-
-  // @Get(':id')
-  // findOne(@Param('id') id: number) {
-  //   return this.knowledgeService.findOne(id);
-  // }
-
+  
+  //get paragraph
+  @Get(':userId')
+  findOne(@Param('userId') userId: string) {
+    return this.knowledgeService.findOne(userId);
+  }
+  
   // @Patch(':userId')
   // update( @Body() updateKnowledgeDto: UpdateKnowledgeDto) {
   //   return this.knowledgeService.update(updateKnowledgeDto);
   // }
+}
+
+
