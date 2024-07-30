@@ -14,7 +14,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @ApiProperty()
     email:string;
 
-    @IsEmpty()
+    @IsOptional()
     @IsString()
     @ApiProperty()
     avatar:string;

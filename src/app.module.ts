@@ -11,6 +11,7 @@ import { User } from './entitites/user.entity';
 import { Knowledge } from './entitites/knowledge.entity';
 import { ApiModule } from './modules/api/api.module';
 import { EnquiryModule } from './modules/enquiry/enquiry.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [ConfigModule.forRoot(),
