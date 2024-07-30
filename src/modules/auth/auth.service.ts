@@ -188,13 +188,14 @@ export class AuthService {
         if (!decodedToken) {
           return ({ message: "Token verification failed" });
         } else {
-          const { email } = decodedToken;
+          console.log(decodedToken);
+          const { email} = decodedToken;
           const salt = 10;
           const hashedPassword = await bcrypt.hash(newPassword, salt);
           const user = await this.userRepo.findOne({ where: { email: email } });
-          user.password = hashedPassword
-          await this.userRepo.save(user);
+          user.password = hashedPassword;
           return {
+            data:await this.userRepo.save(user),
             message: "Password changed successfully"
           }
         }

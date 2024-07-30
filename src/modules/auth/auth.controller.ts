@@ -44,6 +44,7 @@ export class AuthController {
   //rest-password
   @Post('reset-password')
   reset(@Body() body: { password: string }, @Headers('Authorization') token: string) {
+    console.log(body.password);
     return this.authService.reset(body.password, token);
   }
 
