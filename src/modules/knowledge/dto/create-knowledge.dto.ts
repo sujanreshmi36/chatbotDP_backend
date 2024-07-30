@@ -4,9 +4,9 @@ import { IsString, IsUUID } from "class-validator";
 export class CreateKnowledgeDto {
     @IsUUID()
     @ApiProperty()
-    userId:string;
-    
+    userId: string;
+
     @IsString()
     @ApiProperty()
-    paragraph:string;
+    paragraph: string;
 }

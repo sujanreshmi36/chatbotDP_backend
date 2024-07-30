@@ -7,11 +7,11 @@ export class UpdateKnowledgeDto extends PartialType(CreateKnowledgeDto) {
     @IsUUID()
     @IsOptional()
     @ApiProperty()
-    userID:string;
+    userID: string;
 
     @IsString()
     @IsOptional()
     @ApiProperty()
-    paragraph:string;
+    paragraph: string;
 }
 

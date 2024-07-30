@@ -53,8 +53,8 @@ export class KnowledgeService {
 
     try {
       console.log(askQuesDto);
-      const{userId,prompt}=askQuesDto
-      const isuser = await this.userRepo.findOne({ where: { id: userId} });
+      const { userId, prompt } = askQuesDto
+      const isuser = await this.userRepo.findOne({ where: { id: userId } });
       if (!isuser) {
         throw new NotFoundException("User doesnot exist");
       }

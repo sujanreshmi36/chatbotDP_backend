@@ -8,9 +8,9 @@ import { RealIP } from 'nestjs-real-ip';
 
 @Controller('knowledge')
 export class KnowledgeController {
-  constructor(private readonly knowledgeService: KnowledgeService) {}
+  constructor(private readonly knowledgeService: KnowledgeService) { }
 
-@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   create(@Body() createKnowledgeDto: CreateKnowledgeDto) {
     return this.knowledgeService.create(createKnowledgeDto);
@@ -18,22 +18,22 @@ export class KnowledgeController {
 
   @UseGuards(JwtAuthGuard)
   @Post('ask-question')
-  ask(@Body() askQuesDto:askQuesDTO){
+  ask(@Body() askQuesDto: askQuesDTO) {
     return this.knowledgeService.ask(askQuesDto);
   }
-  
+
   //get paragraph
   @Get(':userId')
   findOne(@Param('userId') userId: string) {
     return this.knowledgeService.findOne(userId);
   }
-  
+
   // @Patch(':KnowledgeId')
   // update( @Body() updateKnowledgeDto: UpdateKnowledgeDto,knowl) {
   //   return this.knowledgeService.update(updateKnowledgeDto);
   // }
 
-   // @Delete(':userId')
+  // @Delete(':userId')
   // remove(@Param('userId') userId: string) {
   //   return this.knowledgeService.remove(userId);
   // }

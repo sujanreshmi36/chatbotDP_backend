@@ -56,7 +56,7 @@ export class AuthService {
   //get-info
   async getInfo(token: string) {
     try {
-  
+
       if (!token) {
         throw new NotFoundException("token not found");
       }
@@ -66,7 +66,7 @@ export class AuthService {
       if (!decodedToken) {
         throw new ForbiddenException("Token malformed")
       }
-      
+
       const { payload } = decodedToken;
       const { id } = payload;
       const user = await this.userRepo.findOne({ where: { id: id } });
@@ -189,13 +189,13 @@ export class AuthService {
           return ({ message: "Token verification failed" });
         } else {
           console.log(decodedToken);
-          const { email} = decodedToken;
+          const { email } = decodedToken;
           const salt = 10;
           const hashedPassword = await bcrypt.hash(newPassword, salt);
           const user = await this.userRepo.findOne({ where: { email: email } });
           user.password = hashedPassword;
           return {
-            data:await this.userRepo.save(user),
+            data: await this.userRepo.save(user),
             message: "Password changed successfully"
           }
         }

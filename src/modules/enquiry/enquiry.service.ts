@@ -14,7 +14,7 @@ export class EnquiryService {
     @InjectRepository(Enquiry)
     private enquiryRepo: Repository<Enquiry>) { }
 
-    
+
   async create(createEnquiryDto: CreateEnquiryDto) {
     try {
       const { name, email } = createEnquiryDto;

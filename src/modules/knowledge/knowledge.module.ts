@@ -8,8 +8,8 @@ import { User } from 'src/entitites/user.entity';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Knowledge,User])],
+  imports: [TypeOrmModule.forFeature([Knowledge, User])],
   controllers: [KnowledgeController],
-  providers: [KnowledgeService,JWTStrategy,ConfigService],
+  providers: [KnowledgeService, JWTStrategy, ConfigService],
 })
-export class KnowledgeModule {}
+export class KnowledgeModule { }

@@ -6,7 +6,7 @@ import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) { }
- 
+
     //update user
     @UseGuards(JwtAuthGuard)
     @Patch(':id')
@@ -21,7 +21,7 @@ export class UsersController {
         return this.usersService.remove(id);
     }
 
-       // @Get()
+    // @Get()
     // findAll(){
     //     return this.usersService.findAll();
     // }
