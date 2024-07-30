@@ -22,21 +22,20 @@ export class KnowledgeController {
     return this.knowledgeService.ask(askQuesDto);
   }
   
-
-  @Delete(':userId')
-  remove(@Param('userId') userId: string) {
-    return this.knowledgeService.remove(userId);
-  }
-  
   //get paragraph
   @Get(':userId')
   findOne(@Param('userId') userId: string) {
     return this.knowledgeService.findOne(userId);
   }
   
-  // @Patch(':userId')
-  // update( @Body() updateKnowledgeDto: UpdateKnowledgeDto) {
+  // @Patch(':KnowledgeId')
+  // update( @Body() updateKnowledgeDto: UpdateKnowledgeDto,knowl) {
   //   return this.knowledgeService.update(updateKnowledgeDto);
+  // }
+
+   // @Delete(':userId')
+  // remove(@Param('userId') userId: string) {
+  //   return this.knowledgeService.remove(userId);
   // }
 }
 

@@ -30,9 +30,10 @@ export class KnowledgeService {
       }
       // Check if the user already has a Knowledge entry
       const isExistingKnowledge = await this.knowledgeRepo.findOne({ where: { user: isUser } });
-      console.log(isExistingKnowledge);
+
       if (isExistingKnowledge) {
-        return new ConflictException('User already has a Knowledge entry.');
+        isExistingKnowledge.paragraph = createKnowledgeDto.paragraph;
+        return await this.knowledgeRepo.save(isExistingKnowledge);
       }
 
       //creating knowledge
@@ -42,18 +43,18 @@ export class KnowledgeService {
       return await this.knowledgeRepo.save(knowledgeModel);
     } catch (e) {
 
-      throw e;
+      throw new BadRequestException(e.message);
     }
 
   }
 
 
-
   async ask(askQuesDto: askQuesDTO) {
 
     try {
-      const { userId, prompt } = askQuesDto;
-      const isuser = await this.userRepo.findOne({ where: { id: userId } });
+      console.log(askQuesDto);
+      const{userId,prompt}=askQuesDto
+      const isuser = await this.userRepo.findOne({ where: { id: userId} });
       if (!isuser) {
         throw new NotFoundException("User doesnot exist");
       }
@@ -92,7 +93,7 @@ export class KnowledgeService {
 
   }
 
-//get paragraph
+  //get paragraph
   async findOne(uid: string) {
     try {
       const user = await this.userRepo.findOne({
@@ -100,35 +101,32 @@ export class KnowledgeService {
           id: uid
         }
       })
-      const knowledge = await this.knowledgeRepo.findOne({ where: { user } }); 
-      const { paragraph } = knowledge;
-      if (!paragraph) {
-        throw new ForbiddenException("knowledge not found")
-      }
-      return paragraph;
+      const knowledge = await this.knowledgeRepo.findOne({ where: { user } });
+      const { paragraph, id } = knowledge;
+      return {
+        KnowledgeId: id,
+        paragraph: paragraph
+      };
     } catch (e) {
       throw new BadRequestException(e.message);
     }
 
   }
 
-  //  async update(updateKnowledgeDto: UpdateKnowledgeDto) {
-  //     return await this.knowledgeRepo.update(updateKnowledgeDto);
-  //   }
 
-  async remove(userId: string) {
-    const isuser = await this.userRepo.findOne({ where: { id: userId } });
-    if (!isuser) {
-      throw new ForbiddenException("Invalid user")
-    }
-    const knowledge = await this.knowledgeRepo.findOne({
-      where: {
-        user: isuser
-      }
-    })
-    await this.knowledgeRepo.remove(knowledge);
-    return {
-      message: "Knowledge deleted"
-    }
-  }
+  // async remove(userId: string) {
+  //   const isuser = await this.userRepo.findOne({ where: { id: userId } });
+  //   if (!isuser) {
+  //     throw new ForbiddenException("Invalid user")
+  //   }
+  //   const knowledge = await this.knowledgeRepo.findOne({
+  //     where: {
+  //       user: isuser
+  //     }
+  //   })
+  //   await this.knowledgeRepo.remove(knowledge);
+  //   return {
+  //     message: "Knowledge deleted"
+  //   }
+  // }
 }

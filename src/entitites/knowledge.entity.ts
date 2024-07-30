@@ -6,7 +6,7 @@ export class Knowledge{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({default:""})
     paragraph:string;
 
     @OneToOne(()=>User,(user)=>user.knowledge)
