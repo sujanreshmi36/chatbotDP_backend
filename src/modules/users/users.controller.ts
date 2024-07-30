@@ -30,7 +30,7 @@ export class UsersController {
             }
         })
     }))
-    async update(@UploadedFile(
+    async upload(@UploadedFile(
         new ParseFilePipe({
             validators: [
                 new MaxFileSizeValidator({ maxSize: 2 * 1024 * 1024 }), // 5 MB size limit
@@ -39,7 +39,7 @@ export class UsersController {
         })) file, @Req() req) {
         const filename = file?.filename;
         const { payload } = req.user.data;
-        return this.usersService.update(filename, payload.id);
+        return this.usersService.upload(filename, payload.id);
     }
 
     // @Get()

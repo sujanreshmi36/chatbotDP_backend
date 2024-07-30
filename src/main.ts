@@ -7,15 +7,18 @@ import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   app.enableCors({
     origin: [
       'http://192.168.1.112:5173'
-    ], methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    ], methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
-  app.useStaticAssets(path.join(__dirname,'../uploads'))
+
+  app.useStaticAssets(path.join(__dirname, '../uploads'))
   // app.useGlobalPipes(new ValidationPipe());
+
   const config = new DocumentBuilder()
     .setTitle('Chatbotdp')
     .setDescription('The chatbotDP API description')

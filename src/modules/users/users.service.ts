@@ -13,7 +13,7 @@ export class UsersService {
     private config: ConfigService) { }
 
 
-  async update(filename: string, id: string) {
+  async upload(filename: string, id: string) {
     try {
       console.log(id);
       if (!filename) {
@@ -44,15 +44,6 @@ export class UsersService {
 
   }
 
-  // async update(id: string, updateUserDto: UpdateUserDto) {
-  //   const user = await this.usersRepository.findOneBy({ id });
-  //   if (!user) {
-  //     throw new NotFoundException();
-  //   }
-  //   return await this.usersRepository.update(id, updateUserDto);
-
-  // }
-
   async remove(id: string) {
     try {
       const user = await this.usersRepository.findOneBy({ id });
@@ -66,4 +57,16 @@ export class UsersService {
     }
 
   }
+
+
+
+  // async update(id: string, updateUserDto: UpdateUserDto) {
+  //   const user = await this.usersRepository.findOneBy({ id });
+  //   if (!user) {
+  //     throw new NotFoundException();
+  //   }
+  //   return await this.usersRepository.update(id, updateUserDto);
+
+  // }
+
 }
