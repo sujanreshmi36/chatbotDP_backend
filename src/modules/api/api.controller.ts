@@ -2,25 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } fro
 import { ApiService } from './api.service';
 import { CreateApiDto } from './dto/create-api.dto';
 import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
+import { log } from 'console';
 
 @Controller('api')
 export class ApiController {
   constructor(private readonly apiService: ApiService) { }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get-api')
+  findOne(@Req() req) 
+  {
+    const {payload}=req.user.data;    
+    return this.apiService.findOne(payload.id);
+  }
+
+
   @UseGuards(JwtAuthGuard)
   @Post('generate')
   create(@Body() createApiDto: CreateApiDto, @Req() req) {
-    const { id } = req.user;
-    return this.apiService.create(createApiDto, id);
+    const {payload}=req.user.data;    
+    return this.apiService.create(createApiDto, payload.id);
   }
 
-  // @Get()
+
+
+
+    // @Get()
   // findAll() {
   //   return this.apiService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.apiService.findOne(+id);
   // }
 
   // @Patch(':id')
