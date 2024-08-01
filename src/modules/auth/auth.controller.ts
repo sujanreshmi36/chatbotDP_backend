@@ -4,8 +4,10 @@ import { AuthService } from './auth.service';
 import { LoginDTO } from 'src/modules/users/dto/login-user.dto';
 import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('Authorization')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
@@ -44,7 +46,6 @@ export class AuthController {
   //rest-password
   @Post('reset-password')
   reset(@Body() body: { password: string }, @Headers('Authorization') token: string) {
-    console.log(body.password);
     return this.authService.reset(body.password, token);
   }
 

@@ -5,8 +5,10 @@ import { UpdateKnowledgeDto } from './dto/update-knowledge.dto';
 import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
 import { askQuesDTO } from './dto/askQuestion.dto';
 import { RealIP } from 'nestjs-real-ip';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('knowledge')
+@ApiTags('Knowledge')
 export class KnowledgeController {
   constructor(private readonly knowledgeService: KnowledgeService) { }
 

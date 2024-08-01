@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EnquiryService } from './enquiry.service';
 import { CreateEnquiryDto } from './dto/create-enquiry.dto';
 import { UpdateEnquiryDto } from './dto/update-enquiry.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('enquiry')
+@ApiTags('Enquiry')
 export class EnquiryController {
   constructor(private readonly enquiryService: EnquiryService) { }
 

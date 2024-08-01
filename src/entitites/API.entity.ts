@@ -13,6 +13,9 @@ export class API {
   @Column({ default: '' })
   domain: string;
 
+  @Column({default:false})
+  status:boolean;
+  
   @BeforeInsert()
   generateKey() {
     const uuidWithoutHyphens = uuidv4().replace(/-/g, '');

@@ -52,7 +52,7 @@ export class KnowledgeService {
   async ask(askQuesDto: askQuesDTO) {
 
     try {
-      console.log(askQuesDto);
+      
       const { userId, prompt } = askQuesDto
       const isuser = await this.userRepo.findOne({ where: { id: userId } });
       if (!isuser) {

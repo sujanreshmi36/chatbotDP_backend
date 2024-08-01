@@ -5,8 +5,10 @@ import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('User')
 export class UsersController {
     constructor(private usersService: UsersService) { }
 

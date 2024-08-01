@@ -1,17 +1,12 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { KnowledgeModule } from './modules/knowledge/knowledge.module';
-import { User } from './entitites/user.entity';
-import { Knowledge } from './entitites/knowledge.entity';
 import { ApiModule } from './modules/api/api.module';
 import { EnquiryModule } from './modules/enquiry/enquiry.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -30,8 +25,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       entities: [join(process.cwd(), 'dist/**/*.entity.js')],
     })
   }), UsersModule, AuthModule, KnowledgeModule, ApiModule, EnquiryModule],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {
 }
