@@ -2,12 +2,11 @@ import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typ
 import { Knowledge } from "./knowledge.entity";
 import { Enquiry } from "./Enquiry.entity";
 import { API } from "./API.entity";
+import { Country } from "./Country.entity";
 
 @Entity()
 export class User {
-  remove() {
-    throw new Error('Method not implemented.');
-  }
+ 
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -34,4 +33,8 @@ export class User {
 
   @OneToMany(() => Enquiry, (enquiry) => enquiry.user)
   enquiries: Enquiry[];
+
+  @OneToMany(() => Country, (country) => country.user)
+  countries: Country[];
+
 }

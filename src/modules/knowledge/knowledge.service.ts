@@ -50,9 +50,7 @@ export class KnowledgeService {
 
 
   async ask(askQuesDto: askQuesDTO) {
-
     try {
-      
       const { userId, prompt } = askQuesDto
       const isuser = await this.userRepo.findOne({ where: { id: userId } });
       if (!isuser) {
@@ -71,27 +69,23 @@ export class KnowledgeService {
           message: "Please Enter prompt"
         };
       }
-      const question = `forget my all prompt. I will give you some paragraphs of content. you just have a look and i will ask you question related to them later which you need to answer me. remember just give answer in full sentence tag according to question based on the paragraph. if answer is not found there in paragraph just say some invalid response. paragraph goes like this remember it: ${paragraph} and question is ${prompt}`;
+      // const question = `forget my all prompt. I will give you some paragraphs of content . you just have a look and i will ask you question related to them later which you need to answer me. remember just give answer in full sentence such that you like assistant according to question based on the paragraph. if answer is not found there in paragraph just say some invalid response. paragraph goes like this remember it: ${paragraph} and question is ${prompt}`;
+      const question=`suppose you are assistant of a company and I will give paragraph about that company, user will ask the question and you have to answer them carefully without html tags on the basis of paragraph in natural and short like an assistant and if there is question that is out of paragraph then simply answer 'I can't respond to this quesiton', the paragraph goes like this: ${paragraph} and question goes like this: ${prompt}`;
       const result = await model.generateContent(question);
       const response = await result.response;
       if (response) {
         const text = response.text();
-        const formattedText = text.replace(/\n/g, '<br>'); // Replace newline characters with <br> tags for HTML formatting
         return {
-          answer: formattedText
-        };
-      } else {
-        return {
-          message: "can't get the answer."
+          answer: text
         }
       }
-
     } catch (e) {
-      throw e
+      return {
+        answer: "I can't respond to this message."
+      } 
     }
-
-
   }
+
 
   //get paragraph
   async findOne(uid: string) {

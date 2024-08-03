@@ -18,7 +18,7 @@ export class KnowledgeController {
     return this.knowledgeService.create(createKnowledgeDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+
   @Post('ask-question')
   ask(@Body() askQuesDto: askQuesDTO) {
     return this.knowledgeService.ask(askQuesDto);

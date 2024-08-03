@@ -12,4 +12,9 @@ export class CreateEnquiryDto {
     @ApiProperty()
     email: string;
 
+    @IsEmpty()
+    @IsString()
+    @ApiProperty()
+    userId:string;
+
 }
