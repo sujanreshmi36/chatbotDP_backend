@@ -15,7 +15,6 @@ export class UsersService {
 
   async upload(filename: string, id: string) {
     try {
-      console.log(id);
       if (!filename) {
         throw new BadRequestException("Files are required.");
       }
@@ -57,16 +56,5 @@ export class UsersService {
     }
 
   }
-
-
-
-  // async update(id: string, updateUserDto: UpdateUserDto) {
-  //   const user = await this.usersRepository.findOneBy({ id });
-  //   if (!user) {
-  //     throw new NotFoundException();
-  //   }
-  //   return await this.usersRepository.update(id, updateUserDto);
-
-  // }
 
 }

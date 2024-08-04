@@ -23,6 +23,7 @@ export class KnowledgeController {
   ask(@Body() askQuesDto: askQuesDTO) {
     return this.knowledgeService.ask(askQuesDto);
   }
+  
 
   //get paragraph
   @Get(':userId')
@@ -30,15 +31,6 @@ export class KnowledgeController {
     return this.knowledgeService.findOne(userId);
   }
 
-  // @Patch(':KnowledgeId')
-  // update( @Body() updateKnowledgeDto: UpdateKnowledgeDto,knowl) {
-  //   return this.knowledgeService.update(updateKnowledgeDto);
-  // }
-
-  // @Delete(':userId')
-  // remove(@Param('userId') userId: string) {
-  //   return this.knowledgeService.remove(userId);
-  // }
 }
 
 

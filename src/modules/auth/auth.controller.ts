@@ -49,13 +49,4 @@ export class AuthController {
     return this.authService.reset(body.password, token);
   }
 
-  // @Get('profile')
-  // @UseGuards(JwtAuthGuard)
-  // getProfile(
-  //   @Request()
-  //   req,
-  // ) {
-  //   return req.user;
-  // }
-
 }

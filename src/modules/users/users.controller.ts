@@ -43,13 +43,5 @@ export class UsersController {
         const { payload } = req.user.data;
         return this.usersService.upload(filename, payload.id);
     }
-    // @Get()
-    // findAll(){
-    //     return this.usersService.findAll();
-    // }
-    // @Get(':id')
-    // findOne(@Param('id' )id:string){
-    //     return this.usersService.findOne(id);
-    // }
-
+ 
 }

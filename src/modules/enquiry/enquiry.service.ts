@@ -24,12 +24,13 @@ export class EnquiryService {
 
   async create(createEnquiryDto: CreateEnquiryDto) {
     try {
-      const { name, email, userId } = createEnquiryDto;
+      const { name, email, userId, month } = createEnquiryDto;
       const user = await this.userRepo.findOne({ where: { id: userId } })
       const enquiry = new Enquiry();
       enquiry.name = name;
       enquiry.email = email;
       enquiry.user = user;
+      enquiry.month = month;
       await this.enquiryRepo.save(enquiry);
       return {
         message: "enquiry recieved"
@@ -73,7 +74,6 @@ export class EnquiryService {
       if (enquiries.length === 0) {
         return new NotFoundException("No enquiries found for this user");
       }
-      console.log(enquiries);
       await this.enquiryRepo.remove(enquiries);
       return {
         message: "enquiries deleted successfully"
@@ -92,14 +92,14 @@ export class EnquiryService {
       }
       const country = new Country();
       country.country = countryDto.country;
-      country.ip_address = countryDto.ip_address;
       country.user = User;
-      country.flag=countryDto.flag;
-      return await this.countryRepo.save(country);
+      country.flag = countryDto.flag;
+      return await this.countryRepo.save(country)
     } catch (e) {
       throw new BadRequestException(e.message);
     }
   }
+
 
   async getCountry(userId: string) {
     try {
@@ -107,7 +107,6 @@ export class EnquiryService {
       if (!User) {
         throw new NotFoundException('user not found');
       }
-      console.log(User);
       const records = await this.countryRepo.find({ where: { user: User } });
 
       // If no records are found, return a message or throw an exception

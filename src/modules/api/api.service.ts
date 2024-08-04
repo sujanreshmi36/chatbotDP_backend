@@ -7,6 +7,7 @@ import { API } from 'src/entitites/API.entity';
 import { User } from 'src/entitites/user.entity';
 import { RunApi } from './dto/run-api.dto';
 import { getInfoDTO } from './dto/get-info.dto';
+import { notContains } from 'class-validator';
 
 @Injectable()
 export class ApiService {
@@ -27,6 +28,7 @@ export class ApiService {
         return {
           API_key: existingApi.key,
           domain: existingApi.domain,
+          chatbot_name: existingApi.chatbot_name,
           status: existingApi.status,
           message: "API key already exists for this user",
         };
@@ -39,10 +41,12 @@ export class ApiService {
       const api = new API();
       api.domain = createApiDto.domain;
       api.user = user;
+      api.chatbot_name = createApiDto.chatbot_name;
       const data = await this.apiRepo.save(api);
       return {
         API_key: data.key,
         status: data.status,
+        chatbot_name: data.chatbot_name,
         message: "Api key generated"
       }
     } catch (e) {
@@ -66,6 +70,7 @@ export class ApiService {
       }
       return {
         API_key: key,
+        chatbot_name: api.chatbot_name,
         domain: api.domain,
         status: api.status
       }
@@ -104,11 +109,13 @@ export class ApiService {
       const avatar = user.avatar;
       const userId = user.id;
       const domain = api.domain;
+      const chatbot_name = api.chatbot_name;
       const status = api.status;
       return {
         userId: userId,
         avatar: avatar,
         domain: domain,
+        chatbot_name: chatbot_name,
         status: status
       }
     } catch (e) {
@@ -117,11 +124,20 @@ export class ApiService {
 
   }
 
-  // update(id: number, updateApiDto: UpdateApiDto) {
-  //   return `This action updates a #${id} api`;
-  // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} api`;
-  // }
+  async change( userId:string,updateapi:UpdateApiDto) {
+    try {
+     const isuser=await this.userRepo.findOne({where:{id:userId}});
+     if(!isuser){
+      throw new NotFoundException("user not found");
+     }
+     const isapi=await this.apiRepo.findOne({where:{user:isuser}});
+     isapi.chatbot_name=updateapi.chatbot_name;
+     isapi.domain=updateapi.domain;
+     return this.apiRepo.save(isapi);
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
 }

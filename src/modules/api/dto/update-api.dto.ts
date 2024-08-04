@@ -6,5 +6,10 @@ export class UpdateApiDto extends PartialType(CreateApiDto) {
     @IsOptional()
     @IsString()
     @ApiProperty()
-    domain: string
+    domain: string;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    chatbot_name: string;
 }

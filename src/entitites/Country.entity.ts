@@ -10,9 +10,6 @@ export class Country{
     country:string;
 
     @Column()
-    ip_address:string;
-
-    @Column()
     flag:string;
 
     @ManyToOne(()=>User,(user)=>user.countries)

@@ -48,7 +48,6 @@ export class AuthService {
       }
 
     } catch (e) {
-      console.log("Error during user creation:", e.message);
       throw new BadRequestException(e.message);
     }
   }
@@ -188,7 +187,6 @@ export class AuthService {
         if (!decodedToken) {
           return ({ message: "Token verification failed" });
         } else {
-          console.log(decodedToken);
           const { email } = decodedToken;
           const salt = 10;
           const hashedPassword = await bcrypt.hash(newPassword, salt);

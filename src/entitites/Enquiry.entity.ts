@@ -12,9 +12,11 @@ export class Enquiry {
 
   @Column()
   name: string;
-  
+
   @Column()
   email: string;
 
+  @Column()
+  month: string;
 
 }

@@ -5,5 +5,10 @@ export class CreateApiDto {
     @IsEmpty()
     @IsString()
     @ApiProperty()
-    domain: string
+    domain: string;
+
+    @IsEmpty()
+    @IsString()
+    @ApiProperty()
+    chatbot_name: string;
 }

@@ -15,6 +15,11 @@ export class CreateEnquiryDto {
     @IsEmpty()
     @IsString()
     @ApiProperty()
-    userId:string;
+    userId: string;
+
+    @IsEmpty()
+    @IsString()
+    @ApiProperty()
+    month: string;
 
 }

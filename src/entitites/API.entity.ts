@@ -15,6 +15,9 @@ export class API {
 
   @Column({default:false})
   status:boolean;
+
+  @Column()
+  chatbot_name:string;
   
   @BeforeInsert()
   generateKey() {

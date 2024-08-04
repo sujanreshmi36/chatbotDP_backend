@@ -6,6 +6,7 @@ import { log } from 'console';
 import { RunApi } from './dto/run-api.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { getInfoDTO } from './dto/get-info.dto';
+import { UpdateApiDto } from './dto/update-api.dto';
 
 @Controller('api')
 @ApiTags('API Key')
@@ -33,24 +34,17 @@ export class ApiController {
     return this.apiService.run(runApi);
   }
 
-@Post('get-info')
-getInfo(@Body()getInfoDto:getInfoDTO ){
-  return this.apiService.getInfo(getInfoDto);
-}
+  @Post('get-info')
+  getInfo(@Body() getInfoDto: getInfoDTO) {
+    return this.apiService.getInfo(getInfoDto);
+  }
 
 
-  // @Get()
-  // findAll() {
-  //   return this.apiService.findAll();
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Patch()
+  update(@Req() req, @Body() updateapi: UpdateApiDto) {
+    const { payload } = req.user.data;
+    return this.apiService.change(payload.id, updateapi);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateApiDto: UpdateApiDto) {
-  //   return this.apiService.update(+id, updateApiDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.apiService.remove(+id);
-  // }
 }
