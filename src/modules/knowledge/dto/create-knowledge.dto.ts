@@ -9,4 +9,8 @@ export class CreateKnowledgeDto {
     @IsString()
     @ApiProperty()
     paragraph: string;
+
+    @IsString()
+    @ApiProperty()
+    category: string;
 }

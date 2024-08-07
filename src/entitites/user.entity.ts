@@ -25,8 +25,8 @@ export class User {
   @Column({ default: "" })
   avatar: string;
 
-  @OneToOne(() => Knowledge, (knowledge) => knowledge.user)
-  knowledge: Knowledge;
+  @OneToMany(() => Knowledge, (knowledge) => knowledge.user)
+  knowledges: Knowledge[];
 
   @OneToOne(() => API, (api) => api.user)
   api: API;

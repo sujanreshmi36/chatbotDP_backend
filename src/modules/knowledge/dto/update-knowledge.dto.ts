@@ -5,13 +5,21 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateKnowledgeDto extends PartialType(CreateKnowledgeDto) {
     @IsUUID()
-    @IsOptional()
     @ApiProperty()
-    userID: string;
+    userId: string;
+
+    @IsUUID()
+    @ApiProperty()
+    id: string;
 
     @IsString()
     @IsOptional()
     @ApiProperty()
     paragraph: string;
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    category: string;
 }
 

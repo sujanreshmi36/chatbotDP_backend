@@ -10,22 +10,22 @@ export class API {
   @Column({ unique: true })
   key: string;
 
-  @Column({ default: '' })
+  @Column()
   domain: string;
 
-  @Column({default:false})
-  status:boolean;
+  @Column({ default: false })
+  status: boolean;
 
   @Column()
-  chatbot_name:string;
-  
+  chatbot_name: string;
+
   @BeforeInsert()
   generateKey() {
     const uuidWithoutHyphens = uuidv4().replace(/-/g, '');
     const date = Date.now().toString();
     this.key = `${uuidWithoutHyphens}${date}`;
   }
-  @OneToOne(()=>User,(user)=>user.api)
+  @OneToOne(() => User, (user) => user.api)
   @JoinColumn()
-  user:User  
+  user: User
 }

@@ -1,15 +1,17 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
 @Entity()
 export class Knowledge{
-    @PrimaryGeneratedColumn()
-    id:number;
+    @PrimaryGeneratedColumn("uuid")
+    id:string;
 
     @Column({default:""})
     paragraph:string;
 
-    @OneToOne(()=>User,(user)=>user.knowledge)
-    @JoinColumn()
+    @Column()
+    category: string;
+
+    @ManyToOne(()=>User,(user)=>user.knowledges)
     user:User
 }

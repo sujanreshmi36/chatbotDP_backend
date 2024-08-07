@@ -32,21 +32,14 @@ export class KnowledgeService {
       if (!isUser) {
         throw new ForbiddenException("Invalid userId")
       }
-      // Check if the user already has a Knowledge entry
-      const isExistingKnowledge = await this.knowledgeRepo.findOne({ where: { user: isUser } });
-
-      if (isExistingKnowledge) {
-        isExistingKnowledge.paragraph = createKnowledgeDto.paragraph;
-        return await this.knowledgeRepo.save(isExistingKnowledge);
-      }
 
       //creating knowledge
       const knowledgeModel = new Knowledge()
       knowledgeModel.paragraph = createKnowledgeDto.paragraph;
       knowledgeModel.user = isUser;
+      knowledgeModel.category = createKnowledgeDto.category;
       return await this.knowledgeRepo.save(knowledgeModel);
     } catch (e) {
-
       throw new BadRequestException(e.message);
     }
 
@@ -71,8 +64,8 @@ export class KnowledgeService {
       }
       const genAI = new GoogleGenerativeAI(api_key);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const knowledge = await this.knowledgeRepo.findOne({ where: { user: isuser } });
-      const paragraph = knowledge.paragraph;
+      const knowledge = await this.knowledgeRepo.find({ where: { user: isuser } });
+      const paragraph = knowledge.map(knowledge => knowledge.paragraph);
       if (!prompt) {
         return {
           message: "Please Enter prompt"
@@ -104,16 +97,46 @@ export class KnowledgeService {
           id: uid
         }
       })
-      const knowledge = await this.knowledgeRepo.findOne({ where: { user } });
-      const { paragraph, id } = knowledge;
-      return {
-        KnowledgeId: id,
-        paragraph: paragraph
-      };
+      const knowledge = await this.knowledgeRepo.find({ where: { user } });
+      if (!knowledge) {
+        return;
+      }
+      return knowledge;
     } catch (e) {
       throw new BadRequestException(e.message);
     }
 
+  }
+
+  async update(updateDto: UpdateKnowledgeDto) {
+
+    try {
+      const { userId, id, paragraph, category } = updateDto;
+      const user = await this.userRepo.findOne({ where: { id: userId } });
+      if (!user) {
+        throw new ForbiddenException("Invalid userId")
+      }
+      const isExistingKnowledge = await this.knowledgeRepo.findOne({ where: { user: user, id: id } });
+      isExistingKnowledge.paragraph = paragraph;
+      isExistingKnowledge.category = category;
+      return this.knowledgeRepo.save(isExistingKnowledge);
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  async remove(userId:string,id:string){
+try{
+  const user = await this.userRepo.findOne({ where: { id: userId } });
+  if (!user) {
+    throw new ForbiddenException("Invalid userId")
+  }
+  const isExistingKnowledge = await this.knowledgeRepo.findOne({ where: { user: user, id: id } });
+  return await this.knowledgeRepo.remove(isExistingKnowledge);
+
+}catch(e){
+  throw new BadRequestException(e.message);
+}
   }
 
 }

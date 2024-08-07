@@ -1,11 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EnquiryService } from './enquiry.service';
 import { CreateEnquiryDto } from './dto/create-enquiry.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CountryDTO } from './dto/get-country.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 
 @Controller('enquiry')
 @ApiTags('Enquiry')
@@ -19,19 +16,9 @@ export class EnquiryController {
 
 
   @Post('create-country')
-  @UseInterceptors(FileInterceptor('flag', {
-    storage: diskStorage({
-      destination: "./flags",
-      filename: (req, file, cb) => {
-        const uniqueSuffix = new Date().toISOString().replace(/:/g, '-') + '-';
-        cb(null, `${file.originalname}-${uniqueSuffix}${Math.round(Math.random() * 1E9)}${extname(file.originalname)}`);
-      }
-    })
-  }))
-  createCountry(@Body() countryDto: CountryDTO) {
+  createCoutnry(@Body() countryDto: CountryDTO) {
     return this.enquiryService.createCountry(countryDto);
   }
-
 
   @Get(':userId')
   enquiry(@Param('userId') userId: string) {

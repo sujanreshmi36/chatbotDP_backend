@@ -1,11 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Headers } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { CreateApiDto } from './dto/create-api.dto';
 import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
-import { log } from 'console';
 import { RunApi } from './dto/run-api.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { getInfoDTO } from './dto/get-info.dto';
 import { UpdateApiDto } from './dto/update-api.dto';
 
 @Controller('api')
@@ -13,11 +11,9 @@ import { UpdateApiDto } from './dto/update-api.dto';
 export class ApiController {
   constructor(private readonly apiService: ApiService) { }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('get-api')
-  findOne(@Req() req) {
-    const { payload } = req.user.data;
-    return this.apiService.findOne(payload.id);
+  @Get('get-api/:api_key')
+  findOne(@Param('api_key') api_Key: string) {
+    return this.apiService.findOne(api_Key);
   }
 
 
@@ -34,9 +30,11 @@ export class ApiController {
     return this.apiService.run(runApi);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('get-info')
-  getInfo(@Body() getInfoDto: getInfoDTO) {
-    return this.apiService.getInfo(getInfoDto);
+  getInfo(@Req() req) {
+    const { payload } = req.user.data;
+    return this.apiService.getInfo(payload.id);
   }
 
 
@@ -45,6 +43,12 @@ export class ApiController {
   update(@Req() req, @Body() updateapi: UpdateApiDto) {
     const { payload } = req.user.data;
     return this.apiService.change(payload.id, updateapi);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':api_key')
+  remove(@Param('api_key') api_key: string) {
+    return this.apiService.remove(api_key);
   }
 
 }

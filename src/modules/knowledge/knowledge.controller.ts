@@ -4,7 +4,6 @@ import { CreateKnowledgeDto } from './dto/create-knowledge.dto';
 import { UpdateKnowledgeDto } from './dto/update-knowledge.dto';
 import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
 import { askQuesDTO } from './dto/askQuestion.dto';
-import { RealIP } from 'nestjs-real-ip';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('knowledge')
@@ -23,7 +22,7 @@ export class KnowledgeController {
   ask(@Body() askQuesDto: askQuesDTO) {
     return this.knowledgeService.ask(askQuesDto);
   }
-  
+
 
   //get paragraph
   @Get(':userId')
@@ -31,6 +30,18 @@ export class KnowledgeController {
     return this.knowledgeService.findOne(userId);
   }
 
+
+  @Patch('update')
+  update(@Body() updateDto: UpdateKnowledgeDto) {
+    return this.knowledgeService.update(updateDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':userId/:id')
+  remove(@Param('userId') userId: string, @Param('id') id: string) {
+    return this.knowledgeService.remove(userId, id);
+
+  }
 }
 
 
