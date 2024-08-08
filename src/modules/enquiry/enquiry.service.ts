@@ -85,16 +85,22 @@ export class EnquiryService {
 
   async createCountry(countryDto: CountryDTO) {
     try {
-      const userId = countryDto.userId;
+      const { userId, ip_address } = countryDto;
       const User = await this.userRepo.findOne({ where: { id: userId } });
       if (!User) {
         throw new NotFoundException("user not found");
       }
+      const isExistingCountry = await this.countryRepo.findOne({ where: { ip_address: ip_address } });
+      if (isExistingCountry) {
+        return;
+      }
+
       const country = new Country();
       country.country = countryDto.country;
+      country.ip_address = countryDto.ip_address;
       country.user = User;
       country.flag = countryDto.flag;
-      return await this.countryRepo.save(country)
+      return await this.countryRepo.save(country);
     } catch (e) {
       throw new BadRequestException(e.message);
     }
@@ -118,4 +124,5 @@ export class EnquiryService {
       throw new BadRequestException(e.message);
     }
   }
+
 }

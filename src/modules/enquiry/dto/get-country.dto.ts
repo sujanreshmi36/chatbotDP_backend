@@ -10,6 +10,11 @@ export class CountryDTO {
     @IsEmpty()
     @IsString()
     @ApiProperty()
+    ip_address: string;
+
+    @IsEmpty()
+    @IsString()
+    @ApiProperty()
     userId: string;
 
     @IsEmpty()

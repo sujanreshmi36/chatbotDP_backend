@@ -9,6 +9,9 @@ export class Country{
     @Column()
     country:string;
 
+    @Column({default:''})
+    ip_address:string;
+
     @Column()
     flag:string;
 
