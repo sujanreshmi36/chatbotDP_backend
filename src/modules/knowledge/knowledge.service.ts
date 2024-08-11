@@ -108,7 +108,6 @@ export class KnowledgeService {
         return;
       }
       const prompts = isPrompt.map(isPrompt => isPrompt.prompt);
-      console.log(prompts);
       return prompts;
     } catch (e) {
       throw new BadRequestException(e.message);
