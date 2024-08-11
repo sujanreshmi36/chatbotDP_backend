@@ -2,19 +2,19 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
 @Entity()
-export class Country{
+export class Country {
     @PrimaryGeneratedColumn('uuid')
-    id:string;
+    id: string;
 
     @Column()
-    country:string;
+    country: string;
 
-    @Column({default:''})
-    ip_address:string;
+    @Column({ default: '' })
+    ip_address: string;
 
     @Column()
-    flag:string;
+    flag: string;
 
-    @ManyToOne(()=>User,(user)=>user.countries)
-    user:User;
+    @ManyToOne(() => User, (user) => user.countries)
+    user: User;
 }

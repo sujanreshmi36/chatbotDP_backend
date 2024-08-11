@@ -8,7 +8,7 @@ import { UsersModule } from '../users/users.module';
 import { Country } from 'src/entitites/Country.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Enquiry, User,Country]), UsersModule],
+  imports: [TypeOrmModule.forFeature([Enquiry, User, Country]), UsersModule],
   controllers: [EnquiryController],
   providers: [EnquiryService],
 })

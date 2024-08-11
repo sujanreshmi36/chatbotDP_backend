@@ -20,5 +20,5 @@ export class CountryDTO {
     @IsEmpty()
     @IsString()
     @ApiProperty()
-    flag:string;
+    flag: string;
 }

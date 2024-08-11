@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { API } from 'src/entitites/API.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Knowledge, User,API])],
+  imports: [TypeOrmModule.forFeature([Knowledge, User, API])],
   controllers: [KnowledgeController],
   providers: [KnowledgeService, JWTStrategy, ConfigService],
 })
