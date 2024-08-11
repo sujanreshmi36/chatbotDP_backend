@@ -23,6 +23,11 @@ export class KnowledgeController {
     return this.knowledgeService.ask(askQuesDto);
   }
 
+  @Get('get-prompts/:userId')
+  getPrompt(@Param('userId') userId: string) {
+    return this.knowledgeService.getPrompt(userId);
+  }
+
 
   //get paragraph
   @Get(':userId')

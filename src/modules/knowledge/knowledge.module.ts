@@ -7,9 +7,10 @@ import { Knowledge } from 'src/entitites/knowledge.entity';
 import { User } from 'src/entitites/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { API } from 'src/entitites/API.entity';
+import { Prompt } from 'src/entitites/Prompt.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Knowledge, User, API])],
+  imports: [TypeOrmModule.forFeature([Knowledge, User, API,Prompt])],
   controllers: [KnowledgeController],
   providers: [KnowledgeService, JWTStrategy, ConfigService],
 })

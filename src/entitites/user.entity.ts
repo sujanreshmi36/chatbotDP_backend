@@ -3,10 +3,11 @@ import { Knowledge } from "./knowledge.entity";
 import { Enquiry } from "./Enquiry.entity";
 import { API } from "./API.entity";
 import { Country } from "./Country.entity";
+import { Prompt } from "./Prompt.entity";
 
 @Entity()
 export class User {
- 
+
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -37,4 +38,6 @@ export class User {
   @OneToMany(() => Country, (country) => country.user)
   countries: Country[];
 
+  @OneToMany(() => Prompt, (prompts) => prompts.user)
+  prompts: Prompt[];
 }

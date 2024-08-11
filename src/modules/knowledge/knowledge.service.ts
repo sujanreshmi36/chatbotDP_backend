@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateKnowledgeDto } from './dto/create-knowledge.dto';
 import { UpdateKnowledgeDto } from './dto/update-knowledge.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +9,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ConfigService } from '@nestjs/config';
 import { askQuesDTO } from './dto/askQuestion.dto';
 import { API } from 'src/entitites/API.entity';
+import { Prompt } from 'src/entitites/Prompt.entity';
 
 @Injectable()
 export class KnowledgeService {
@@ -21,6 +22,9 @@ export class KnowledgeService {
 
     @InjectRepository(API)
     private apiRepo: Repository<API>,
+
+    @InjectRepository(Prompt)
+    private promptRepo: Repository<Prompt>,
 
     private config: ConfigService
 
@@ -76,6 +80,10 @@ export class KnowledgeService {
       const result = await model.generateContent(question);
       const response = await result.response;
       if (response) {
+        const savePrompt = new Prompt();
+        savePrompt.prompt = askQuesDto.prompt;
+        savePrompt.user = isuser;
+        await this.promptRepo.save(savePrompt);
         const text = response.text();
         return {
           answer: text
@@ -85,6 +93,25 @@ export class KnowledgeService {
       return {
         answer: "I can't respond to this message."
       }
+    }
+  }
+
+  //get-prompts
+  async getPrompt(userId: string) {
+    try {
+      const isUser = await this.userRepo.findOne({ where: { id: userId } });
+      if (!isUser) {
+        throw new NotFoundException("user not found.");
+      }
+      const isPrompt = await this.promptRepo.find({ where: { user: isUser } });
+      if (!isPrompt) {
+        return;
+      }
+      const prompts = isPrompt.map(isPrompt => isPrompt.prompt);
+      console.log(prompts);
+      return prompts;
+    } catch (e) {
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -125,18 +152,18 @@ export class KnowledgeService {
     }
   }
 
-  async remove(userId:string,id:string){
-try{
-  const user = await this.userRepo.findOne({ where: { id: userId } });
-  if (!user) {
-    throw new ForbiddenException("Invalid userId")
-  }
-  const isExistingKnowledge = await this.knowledgeRepo.findOne({ where: { user: user, id: id } });
-  return await this.knowledgeRepo.remove(isExistingKnowledge);
+  async remove(userId: string, id: string) {
+    try {
+      const user = await this.userRepo.findOne({ where: { id: userId } });
+      if (!user) {
+        throw new ForbiddenException("Invalid userId")
+      }
+      const isExistingKnowledge = await this.knowledgeRepo.findOne({ where: { user: user, id: id } });
+      return await this.knowledgeRepo.remove(isExistingKnowledge);
 
-}catch(e){
-  throw new BadRequestException(e.message);
-}
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 
 }
