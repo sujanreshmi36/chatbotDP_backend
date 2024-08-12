@@ -9,6 +9,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ConfigService } from '@nestjs/config';
 import { askQuesDTO } from './dto/askQuestion.dto';
 import { API } from 'src/entitites/API.entity';
+import { Prompt } from 'src/entitites/Prompt.entity';
+import * as pdfParse from 'pdf-parse';
 
 @Injectable()
 export class KnowledgeService {
