@@ -199,7 +199,7 @@ export class AuthService {
         }
       }
     } catch (e) {
-
+      throw new BadRequestException(e.message);
     }
 
   }

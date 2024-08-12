@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Ip, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Ip, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { KnowledgeService } from './knowledge.service';
 import { CreateKnowledgeDto } from './dto/create-knowledge.dto';
 import { UpdateKnowledgeDto } from './dto/update-knowledge.dto';
 import { JwtAuthGuard } from 'src/middleware/guards/jwt.guard';
 import { askQuesDTO } from './dto/askQuestion.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('knowledge')
 @ApiTags('Knowledge')
@@ -12,9 +13,10 @@ export class KnowledgeController {
   constructor(private readonly knowledgeService: KnowledgeService) { }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
   @Post('create')
-  create(@Body() createKnowledgeDto: CreateKnowledgeDto) {
-    return this.knowledgeService.create(createKnowledgeDto);
+  create(@Body() createKnowledgeDto: CreateKnowledgeDto, @UploadedFile() file?: Express.Multer.File ) {
+    return this.knowledgeService.create(createKnowledgeDto,file);
   }
 
 
