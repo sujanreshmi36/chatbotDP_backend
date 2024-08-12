@@ -9,7 +9,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ConfigService } from '@nestjs/config';
 import { askQuesDTO } from './dto/askQuestion.dto';
 import { API } from 'src/entitites/API.entity';
-import { Prompt } from 'src/entitites/Prompt.entity';
 
 @Injectable()
 export class KnowledgeService {
@@ -30,7 +29,7 @@ export class KnowledgeService {
 
   ) { }
 
-  async create(createKnowledgeDto: CreateKnowledgeDto) {
+  async create(createKnowledgeDto: CreateKnowledgeDto, pdfFile?: Express.Multer.File) {
     try {
       const isUser = await this.userRepo.findOne({ where: { id: createKnowledgeDto.userId } })
       if (!isUser) {
@@ -39,7 +38,22 @@ export class KnowledgeService {
 
       //creating knowledge
       const knowledgeModel = new Knowledge()
-      knowledgeModel.paragraph = createKnowledgeDto.paragraph;
+      if (pdfFile) {
+        try {
+          const pdfContent = await pdfParse.default(pdfFile.buffer);
+          knowledgeModel.paragraph = pdfContent.text.replace(/\s+/g, ' ').trim();
+        } catch (e) {
+          console.warn('Warning during PDF parsing:', e);
+          throw new BadRequestException('Failed to parse PDF file');
+        }
+
+
+      } else if (createKnowledgeDto.paragraph) {
+        knowledgeModel.paragraph = createKnowledgeDto.paragraph;
+      } else {
+        throw new BadRequestException('No paragraph or PDF file provided');
+      }
+
       knowledgeModel.user = isUser;
       knowledgeModel.category = createKnowledgeDto.category;
       return await this.knowledgeRepo.save(knowledgeModel);
@@ -76,7 +90,7 @@ export class KnowledgeService {
         };
       }
       // const question = `forget my all prompt. I will give you some paragraphs of content . you just have a look and i will ask you question related to them later which you need to answer me. remember just give answer in full sentence such that you like assistant according to question based on the paragraph. if answer is not found there in paragraph just say some invalid response. paragraph goes like this remember it: ${paragraph} and question is ${prompt}`;
-      const question = `suppose you are assistant of a company and I will give paragraph about that company, user will ask the question and you have to answer them carefully without html tags on the basis of paragraph in natural and short like an assistant and if there is question that is out of paragraph then simply answer 'I can't respond to this quesiton', the paragraph goes like this: ${paragraph} and question goes like this: ${prompt}`;
+      const question = `suppose you are assistant of a company and I will give paragraph about that company, user will ask the question and you have to answer them carefully without html tags on the basis of paragraph in natural and short like an assistant and if there is question that is out of paragraph then simply answer 'I can't respond to this quesiton' and if there are points then simply give answer in points, the paragraph goes like this: ${paragraph} and question goes like this: ${prompt}`;
       const result = await model.generateContent(question);
       const response = await result.response;
       if (response) {
