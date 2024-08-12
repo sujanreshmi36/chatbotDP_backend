@@ -99,10 +99,10 @@ export class KnowledgeService {
         const savePrompt = new Prompt();
         savePrompt.prompt = askQuesDto.prompt;
         savePrompt.user = isuser;
+        savePrompt.response = response.text()
         await this.promptRepo.save(savePrompt);
-        const text = response.text();
         return {
-          answer: text
+          answer: response.text()
         }
       }
     } catch (e) {
@@ -113,9 +113,9 @@ export class KnowledgeService {
   }
 
   //get-prompts
-  async getPrompt(userId: string) {
+  async getPrompt(userid: string) {
     try {
-      const isUser = await this.userRepo.findOne({ where: { id: userId } });
+      const isUser = await this.userRepo.findOne({ where: { id: userid } });
       if (!isUser) {
         throw new NotFoundException("user not found.");
       }
@@ -124,7 +124,15 @@ export class KnowledgeService {
         return;
       }
       const prompts = isPrompt.map(isPrompt => isPrompt.prompt);
-      return prompts;
+      const id = isPrompt.map(isPrompt => isPrompt.id);
+      const response = isPrompt.map(isPrompt => isPrompt.response);
+      const userId = isPrompt.map(isPrompt => isPrompt.user);
+      return {
+        prompts: prompts,
+        id: isPrompt,
+        response: response,
+        userId: userId
+      }
     } catch (e) {
       throw new BadRequestException(e.message);
     }

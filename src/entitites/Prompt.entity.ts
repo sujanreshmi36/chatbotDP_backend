@@ -4,12 +4,15 @@ import { User } from "./user.entity";
 @Entity()
 export class Prompt {
     @PrimaryGeneratedColumn('uuid')
-    id:string;
+    id: string;
 
     @Column()
-    prompt:string;
+    prompt: string;
 
-    @ManyToOne(()=>User,(user)=>user.prompts)
-    user:User;
+    @Column()
+    response: string;
+
+    @ManyToOne(() => User, (user) => user.prompts)
+    user: User;
 
 }
