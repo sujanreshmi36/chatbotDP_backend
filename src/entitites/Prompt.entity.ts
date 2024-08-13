@@ -6,13 +6,13 @@ export class Prompt {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column({nullable:true})
     prompt: string;
 
     @Column()
     response: string;
 
-    @Column('uuid')
+    @Column('uuid',{nullable:true})
     sessionId:string;
 
     @ManyToOne(() => User, (user) => user.prompts)

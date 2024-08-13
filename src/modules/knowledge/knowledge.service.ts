@@ -134,7 +134,7 @@ export class KnowledgeService {
       const userId = isPrompt.map(isPrompt => isPrompt.user);
       return {
         prompts: prompts,
-        id: isPrompt,
+        id: id,
         response: response,
         userId: userId
       }
@@ -144,7 +144,7 @@ export class KnowledgeService {
   }
 
 
-
+//generate session id
   async generate() {
     try {
       const sessionId = uuidv4();
