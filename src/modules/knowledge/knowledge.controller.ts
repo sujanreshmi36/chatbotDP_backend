@@ -15,8 +15,8 @@ export class KnowledgeController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @Post('create')
-  create(@Body() createKnowledgeDto: CreateKnowledgeDto, @UploadedFile() file?: Express.Multer.File ) {
-    return this.knowledgeService.create(createKnowledgeDto,file);
+  create(@Body() createKnowledgeDto: CreateKnowledgeDto, @UploadedFile() file?: Express.Multer.File) {
+    return this.knowledgeService.create(createKnowledgeDto, file);
   }
 
 
@@ -25,11 +25,22 @@ export class KnowledgeController {
     return this.knowledgeService.ask(askQuesDto);
   }
 
+  @Get('get-sessionId')
+  generate(){
+    return this.knowledgeService.generate();
+  }
+
+  
   @Get('get-prompts/:userId')
   getPrompt(@Param('userId') userId: string) {
     return this.knowledgeService.getPrompt(userId);
   }
 
+
+  @Get('get-history/:sessionId')
+  getHistory(@Param('sessionId') sessionId: string) {
+    return this.knowledgeService.getHistroy(sessionId);
+  }
 
   //get paragraph
   @Get(':userId')

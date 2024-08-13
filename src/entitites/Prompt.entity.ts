@@ -12,6 +12,9 @@ export class Prompt {
     @Column()
     response: string;
 
+    @Column('uuid')
+    sessionId:string;
+
     @ManyToOne(() => User, (user) => user.prompts)
     user: User;
 

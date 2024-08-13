@@ -10,4 +10,11 @@ export class askQuesDTO {
     @IsString()
     @ApiProperty()
     prompt: string;
+    
+    @IsEmpty()
+    @IsString()
+    @ApiProperty()
+    sessionId: string;
+    
+
 }

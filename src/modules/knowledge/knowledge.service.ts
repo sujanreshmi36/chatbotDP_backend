@@ -11,6 +11,7 @@ import { askQuesDTO } from './dto/askQuestion.dto';
 import { API } from 'src/entitites/API.entity';
 import { Prompt } from 'src/entitites/Prompt.entity';
 import * as pdfParse from 'pdf-parse';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class KnowledgeService {
@@ -30,6 +31,8 @@ export class KnowledgeService {
     private config: ConfigService
 
   ) { }
+
+
 
   async create(createKnowledgeDto: CreateKnowledgeDto, pdfFile?: Express.Multer.File) {
     try {
@@ -68,7 +71,7 @@ export class KnowledgeService {
 
   async ask(askQuesDto: askQuesDTO) {
     try {
-      const { userId, prompt } = askQuesDto
+      const { userId, prompt, sessionId } = askQuesDto
       const isuser = await this.userRepo.findOne({ where: { id: userId } });
       if (!isuser) {
         throw new NotFoundException("User doesnot exist");
@@ -97,7 +100,8 @@ export class KnowledgeService {
       const response = await result.response;
       if (response) {
         const savePrompt = new Prompt();
-        savePrompt.prompt = askQuesDto.prompt;
+        savePrompt.prompt = prompt;
+        savePrompt.sessionId = sessionId;
         savePrompt.user = isuser;
         savePrompt.response = response.text()
         await this.promptRepo.save(savePrompt);
@@ -106,9 +110,10 @@ export class KnowledgeService {
         }
       }
     } catch (e) {
-      return {
-        answer: "I can't respond to this message."
-      }
+      // return {
+      //   answer: "I can't respond to this message."
+      // }
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -138,6 +143,35 @@ export class KnowledgeService {
     }
   }
 
+
+
+  async generate() {
+    try {
+      const sessionId = uuidv4();
+      return sessionId;
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+
+  }
+
+
+  //get-history
+  async getHistroy(sessionID: string) {
+    try {
+      const prompts = await this.promptRepo.find({ where: { sessionId: sessionID } });
+      if (!prompts) {
+        return;
+      }
+      const responses = prompts.map(prompt => ({
+        prompt: prompt.prompt,
+        response: prompt.response
+      }));
+      return { responses };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
 
   //get paragraph
   async findOne(uid: string) {
