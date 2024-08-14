@@ -6,10 +6,11 @@ export class CreateUserDto {
   @IsString()
   @ApiProperty()
   name: string;
-  password: string;
- 
-  @ApiProperty()
-  @IsOptional()
+
+  @IsEmpty()
   @IsString()
-  role: string;
+  @ApiProperty()
+  password: string;
+
+
 }

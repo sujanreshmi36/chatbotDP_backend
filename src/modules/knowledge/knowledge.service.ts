@@ -40,30 +40,31 @@ export class KnowledgeService {
       if (!isUser) {
         throw new ForbiddenException("Invalid userId")
       }
-
       //creating knowledge
       const knowledgeModel = new Knowledge()
       if (pdfFile) {
-        try {
-          const pdfContent = await pdfParse.default(pdfFile.buffer);
-          knowledgeModel.paragraph = pdfContent.text.replace(/\s+/g, ' ').trim();
-        } catch (e) {
-          console.warn('Warning during PDF parsing:', e);
-          throw new BadRequestException('Failed to parse PDF file');
+        const pdfContent = await pdfParse.default(pdfFile.buffer);
+        if (!pdfContent.metadata) {
+          throw new BadRequestException("Invalid data form");
         }
-
-
+        const maxLength = 5000;
+        if (pdfContent.text.length > maxLength) {
+          throw new BadRequestException(`The PDF content is too long. Maximum allowed length is ${maxLength} characters.`);
+        }
+        knowledgeModel.paragraph = pdfContent.text.replace(/\s+/g, ' ').trim();
       } else if (createKnowledgeDto.paragraph) {
         knowledgeModel.paragraph = createKnowledgeDto.paragraph;
       } else {
         throw new BadRequestException('No paragraph or PDF file provided');
       }
-
       knowledgeModel.user = isUser;
       knowledgeModel.category = createKnowledgeDto.category;
       return await this.knowledgeRepo.save(knowledgeModel);
     } catch (e) {
-      throw new BadRequestException(e.message);
+      if (e instanceof ForbiddenException || e instanceof BadRequestException) {
+        throw e;
+      }
+      throw new BadRequestException("Invalid file format");
     }
 
   }
@@ -144,7 +145,7 @@ export class KnowledgeService {
   }
 
 
-//generate session id
+  //generate session id
   async generate() {
     try {
       const sessionId = uuidv4();
