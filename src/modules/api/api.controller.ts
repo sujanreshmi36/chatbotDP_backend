@@ -25,8 +25,8 @@ export class ApiController {
   }
 
 
-  @Post('run/:userId')
-  run(@Param('userId' ) userId:string){
+  @Patch('run/:userId')
+  run(@Param('userId') userId: string) {
     return this.apiService.run(userId);
   }
 
