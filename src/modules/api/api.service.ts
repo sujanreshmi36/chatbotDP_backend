@@ -52,9 +52,9 @@ export class ApiService {
 
 
 
-  async run(runApi: RunApi) {
+  async run(userId: string) {
     try {
-      const id = runApi.userId;
+      const id = userId;
       const user = await this.userRepo.findOne({ where: { id: id } });
       if (!user) {
         throw new NotFoundException("user not found");

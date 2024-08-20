@@ -25,9 +25,9 @@ export class ApiController {
   }
 
 
-  @Post('run')
-  run(@Body() runApi: RunApi) {
-    return this.apiService.run(runApi);
+  @Post('run/:userId')
+  run(@Param('userId' ) userId:string){
+    return this.apiService.run(userId);
   }
 
   @UseGuards(JwtAuthGuard)
