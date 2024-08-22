@@ -21,7 +21,7 @@ import { EnquiryModule } from './modules/enquiry/enquiry.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        synchronize: true,
+        synchronize: false,
         logging: false,
         entities: [__dirname + '/../**/*.entity.js'],
       }),
