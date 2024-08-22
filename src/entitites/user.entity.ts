@@ -1,14 +1,19 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Knowledge } from "./knowledge.entity";
-import { Enquiry } from "./Enquiry.entity";
-import { API } from "./API.entity";
-import { Country } from "./Country.entity";
-import { Prompt } from "./Prompt.entity";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Knowledge } from './knowledge.entity';
+import { Enquiry } from './Enquiry.entity';
+import { API } from './API.entity';
+import { Country } from './Country.entity';
+import { Prompt } from './Prompt.entity';
 
 @Entity()
 export class User {
-
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -23,7 +28,7 @@ export class User {
   @Column()
   role: string;
 
-  @Column({ default: "" })
+  @Column({ default: '' })
   avatar: string;
 
   @OneToMany(() => Knowledge, (knowledge) => knowledge.user)
