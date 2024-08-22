@@ -23,7 +23,7 @@ import { EnquiryModule } from './modules/enquiry/enquiry.module';
         database: configService.get('DB_NAME'),
         synchronize: false,
         logging: false,
-        entities: [join(process.cwd(), 'dist/**/*.entity.js')],
+        entities: [__dirname + '/../**/*.entity.js'],
       }),
     }),
     UsersModule,
