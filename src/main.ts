@@ -14,8 +14,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
-
-  app.useStaticAssets(path.join(__dirname, '../uploads'))
+  app.setGlobalPrefix('api/v1');
+  app.useStaticAssets(path.join(__dirname, '../uploads'));
   // app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
